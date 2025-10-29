@@ -9,7 +9,6 @@ export const adminAuthMiddleware = async (req, res, next) => {
     }
 
     let decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
 
     if (!decoded) {
       return res.status(400).json({ message: "User not authenticated" });
