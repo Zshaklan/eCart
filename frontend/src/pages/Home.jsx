@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import Background from "../components/Background";
-import Hero from "../components/Hero";
+import Background from "../components/Background.jsx";
+import Hero from "../components/Hero.jsx";
+import Product from "./Product.jsx";
 
 const heroData = [
   { text1: "30% OFF Limited Offer", text2: "Style that Inspires" },
@@ -21,18 +22,24 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="w-screen h-screen flex flex-col md:flex-row bg-linear-to-l from-[#141414] to-[#0c2025] overflow-hidden relative">
-      <div className="relative w-full md:w-1/2 h-1/2 md:h-full">
-        <Background heroCount={heroCount} />
+    <div className="w-screen min-h-screen flex flex-col bg-linear-to-l from-[#141414] to-[#0c2025]">
+      <div className="w-full h-screen flex flex-col md:flex-row overflow-hidden relative">
+        <div className="relative w-full md:w-1/2 h-1/2 md:h-full">
+          <Background heroCount={heroCount} />
+        </div>
+
+        <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center px-6 md:px-16 text-white">
+          <Hero
+            heroData={heroData[heroCount]}
+            heroCount={heroCount}
+            setHeroCount={setHeroCount}
+          />
+        </div>
       </div>
 
-      <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center px-6 md:px-16 text-white">
-        <Hero
-          heroData={heroData[heroCount]}
-          heroCount={heroCount}
-          setHeroCount={setHeroCount}
-        />
-      </div>
+      <section className="w-full mt-10">
+        <Product />
+      </section>
     </div>
   );
 };

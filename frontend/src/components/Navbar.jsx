@@ -42,16 +42,28 @@ const Navbar = () => {
 
       <div className="w-[50%] lg:w-[40%] hidden md:flex">
         <ul className="flex items-center justify-center gap-[19px] text-white">
-          <li className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl">
+          <li
+            className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl"
+            onClick={() => navigate("/")}
+          >
             HOME
           </li>
-          <li className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl">
+          <li
+            className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl"
+            onClick={() => navigate("/collections")}
+          >
             COLLECTIONS
           </li>
-          <li className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl">
+          <li
+            className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl"
+            onClick={() => navigate("/about")}
+          >
             ABOUT
           </li>
-          <li className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl">
+          <li
+            className="text-[15px] hover:bg-slate-500 cursor-pointer bg-[#000000c9] py-2.5 px-5 rounded-2xl"
+            onClick={() => navigate("/contact")}
+          >
             CONTACT
           </li>
         </ul>
@@ -85,7 +97,7 @@ const Navbar = () => {
         <div className="w-full h-20 bg-[#d8f6f6dd] absolute top-full left-0 right-0 flex items-center justify-center ">
           <input
             type="text"
-            className="w-[50%] h-[60%] bg-[#233533] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]"
+            className="lg:w-[50%] w-[80%] h-[60%] bg-[#233533] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]"
             placeholder="Search here"
           />
         </div>
@@ -126,18 +138,36 @@ const Navbar = () => {
         </div>
       )}
 
-      <div className="w-screen h-[90px] flex items-center justify-between px-5 fixed bottom-0 left-0 bg-[#191818] md:hidden text-[12px]">
-        <button className="text-white flex items-center justify-center flex-col gap-2">
-          <IoMdHome size={25} /> Home
+      {/* Navigation for small devices */}
+      <div className="w-screen h-[90px] flex items-center justify-between px-5 fixed bottom-0 left-0 bg-[#191818] md:hidden text-[12px] ">
+        <button
+          className="text-white flex items-center justify-center flex-col gap-2"
+          onClick={() => navigate("/")}
+        >
+          <IoMdHome size={30} /> Home
         </button>
-        <button className="text-white flex items-center justify-center flex-col gap-2">
-          <HiOutlineCollection size={25} /> Collections
+        <button
+          className="text-white flex items-center justify-center flex-col gap-2"
+          onClick={() => navigate("/collections")}
+        >
+          <HiOutlineCollection size={30} />
+          Collections
         </button>
-        <button className="text-white flex items-center justify-center flex-col gap-2">
-          <MdContacts size={25} /> Contact
+        <button
+          className="text-white flex items-center justify-center flex-col gap-2"
+          onClick={() => navigate("/contact")}
+        >
+          <MdContacts size={30} />
+          Contact
         </button>
-        <button className="text-white flex items-center justify-center flex-col gap-2">
-          <IoMdCart size={25} /> Cart
+        <button
+          className="text-white flex items-center justify-center flex-col gap-2 relative"
+          onClick={() => navigate("/cart")}
+        >
+          <IoMdCart size={30} /> Cart
+          <p className="absolute w-[18px] h-[18px] flex items-center justify-center bg-white px-[5px]  text-black rounded-full text-[12px] bottom-11 right-0 ">
+            10
+          </p>
         </button>
       </div>
     </div>
