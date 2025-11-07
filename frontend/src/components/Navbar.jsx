@@ -10,9 +10,11 @@ import { useContext, useState } from "react";
 import { UserDataContext } from "../context/UserContext.jsx";
 import { AuthDataContext } from "../context/AuthContext.jsx";
 import axios from "axios";
+import { ShopDataContext } from "../context/ShopContext.jsx";
 
 const Navbar = () => {
-  const [showSearch, setShowSearch] = useState(false);
+  const { showSearch, setShowSearch, search, setSearch } =
+    useContext(ShopDataContext);
   const [showProfile, setShowProfile] = useState(false);
   const { serverUrl } = useContext(AuthDataContext);
   const { userData, setUserData } = useContext(UserDataContext);
@@ -72,7 +74,10 @@ const Navbar = () => {
       <div className="w-[30%] flex items-center justify-end gap-5 cursor-pointer">
         <IoSearchCircleOutline
           size={25}
-          onClick={() => setShowSearch((prev) => !prev)}
+          onClick={() => {
+            setShowSearch((prev) => !prev);
+            navigate("/collections");
+          }}
         />
         {!userData ? (
           <FaCircleUser
@@ -99,6 +104,8 @@ const Navbar = () => {
             type="text"
             className="lg:w-[50%] w-[80%] h-[60%] bg-[#233533] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]"
             placeholder="Search here"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       )}

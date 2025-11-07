@@ -1,11 +1,17 @@
 import { useContext } from "react";
 import { ShopDataContext } from "../context/ShopContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ name, image, id, price }) => {
   const { currency } = useContext(ShopDataContext);
 
+  const navigate = useNavigate();
+
   return (
-    <div className="w-[300px] max-w-[90%] h-[400px] bg-[#ffffff0a] backdrop-blur-lg hover:scale-[102%] flex items-start justify-start flex-col p-2.5 cursor-pointer border border-[#80808049]">
+    <div
+      className="w-[300px] max-w-[90%] h-[400px] bg-[#ffffff0a] backdrop-blur-lg hover:scale-[102%] flex items-start justify-start flex-col p-2.5 cursor-pointer border border-[#80808049]"
+      onClick={() => navigate(`/product-detail/${id}`)}
+    >
       <img
         src={image}
         alt="productImg"
