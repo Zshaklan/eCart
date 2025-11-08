@@ -13,7 +13,7 @@ import axios from "axios";
 import { ShopDataContext } from "../context/ShopContext.jsx";
 
 const Navbar = () => {
-  const { showSearch, setShowSearch, search, setSearch } =
+  const { showSearch, setShowSearch, search, setSearch, cartData } =
     useContext(ShopDataContext);
   const [showProfile, setShowProfile] = useState(false);
   const { serverUrl } = useContext(AuthDataContext);
@@ -92,10 +92,16 @@ const Navbar = () => {
             {userData?.name.slice(0, 1)}
           </div>
         )}
-        <IoMdCart size={25} className="hidden md:block" />
-        <p className="absolute w-[18px] h-[18px] items-center justify-center bg-black px-[5px] py-0.5 text-white rounded-full text-[9px] top-2.5 right-[23px] hidden md:block">
-          10
-        </p>
+        <IoMdCart
+          size={25}
+          className="hidden md:block"
+          onClick={() => navigate("/cart")}
+        />
+        {cartData.length > 0 && (
+          <p className="absolute w-[18px] h-[18px] bg-red-400 text-center text-white text-[9px] top-2.5 py-1 right-[23px] rounded hidden md:block">
+            {cartData.length}
+          </p>
+        )}
       </div>
 
       {showSearch && (
@@ -172,9 +178,11 @@ const Navbar = () => {
           onClick={() => navigate("/cart")}
         >
           <IoMdCart size={30} /> Cart
-          <p className="absolute w-[18px] h-[18px] flex items-center justify-center bg-white px-[5px]  text-black rounded-full text-[12px] bottom-11 right-0 ">
-            10
-          </p>
+          {cartData.length > 0 && (
+            <p className="absolute w-[18px] h-[18px] rounded bg-red-400 text-center text-black text-[12px] bottom-11 right-0 ">
+              {cartData.length}
+            </p>
+          )}
         </button>
       </div>
     </div>
