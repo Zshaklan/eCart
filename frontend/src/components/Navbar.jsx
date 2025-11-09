@@ -13,12 +13,13 @@ import axios from "axios";
 import { ShopDataContext } from "../context/ShopContext.jsx";
 
 const Navbar = () => {
-  const { showSearch, setShowSearch, search, setSearch, cartData } =
+  const { showSearch, setShowSearch, search, setSearch, getCartCount } =
     useContext(ShopDataContext);
   const [showProfile, setShowProfile] = useState(false);
   const { serverUrl } = useContext(AuthDataContext);
   const { userData, setUserData } = useContext(UserDataContext);
   const navigate = useNavigate();
+  let cartCount = getCartCount();
 
   async function handleLogout() {
     try {
@@ -97,9 +98,9 @@ const Navbar = () => {
           className="hidden md:block"
           onClick={() => navigate("/cart")}
         />
-        {cartData.length > 0 && (
+        {cartCount > 0 && (
           <p className="absolute w-[18px] h-[18px] bg-red-400 text-center text-white text-[9px] top-2.5 py-1 right-[23px] rounded hidden md:block">
-            {cartData.length}
+            {cartCount}
           </p>
         )}
       </div>
@@ -178,9 +179,9 @@ const Navbar = () => {
           onClick={() => navigate("/cart")}
         >
           <IoMdCart size={30} /> Cart
-          {cartData.length > 0 && (
+          {cartCount > 0 && (
             <p className="absolute w-[18px] h-[18px] rounded bg-red-400 text-center text-black text-[12px] bottom-11 right-0 ">
-              {cartData.length}
+              {cartCount}
             </p>
           )}
         </button>

@@ -9,13 +9,12 @@ export const authMiddleware = async (req, res, next) => {
     }
 
     let decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
 
     if (!decoded) {
       return res.status(400).json({ message: "User not authenticated" });
     }
 
-    req.userId = decoded.userId;
+    req.userId = decoded.id;
     next();
   } catch (error) {
     console.log(`Auth Middleware Error `, error);

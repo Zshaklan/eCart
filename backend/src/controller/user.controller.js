@@ -2,7 +2,7 @@ import User from "../model/user.model.js";
 
 export const getCurrentUser = async (req, res) => {
   try {
-    let user = await User.findOne(req.userId).select("-password");
+    let user = await User.findOne({ _id: req.userId }).select("-password");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

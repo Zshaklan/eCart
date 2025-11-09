@@ -11,9 +11,13 @@ import Collections from "./pages/Collections.jsx";
 import About from "./pages/About.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import CartPage from "./pages/CartPage.jsx";
+import PlaceOrder from "./pages/PlaceOrder.jsx";
+import { ShopDataContext } from "./context/ShopContext.jsx";
+import Order from "./pages/Order.jsx";
 
 const App = () => {
   const { userData } = useContext(UserDataContext);
+  const { cartData } = useContext(ShopDataContext);
   const location = useLocation();
 
   return (
@@ -109,6 +113,28 @@ const App = () => {
           element={
             userData ? (
               <CartPage />
+            ) : (
+              <Navigate to="/login" state={{ from: location.pathname }} />
+            )
+          }
+        />
+
+        <Route
+          path="/placeorder"
+          element={
+            userData && cartData.length > 0 ? (
+              <PlaceOrder />
+            ) : (
+              <Navigate to="/login" state={{ from: location.pathname }} />
+            )
+          }
+        />
+
+        <Route
+          path="/order"
+          element={
+            userData ? (
+              <Order />
             ) : (
               <Navigate to="/login" state={{ from: location.pathname }} />
             )

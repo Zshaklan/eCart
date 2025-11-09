@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { AuthDataContext } from "./AuthContext";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 // eslint-disable-next-line
 export const ShopDataContext = createContext({});
@@ -31,75 +32,108 @@ const ShopContextProvider = ({ children }) => {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cartData");
-    if (storedCart) {
-      try {
-        setCartData(JSON.parse(storedCart));
-      } catch (error) {
-        console.error("Error parsing cart data:", error);
-        localStorage.removeItem("cartData");
+  const getUserCart = async () => {
+    try {
+      const response = await axios.get(`${serverUrl}/api/cart/get`, {
+        withCredentials: true,
+      });
+      if (response.data.success) {
+        setCartData(response.data.cartData);
       }
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
     }
+  };
+
+  useEffect(() => {
+    getUserCart();
+    // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("cartData", JSON.stringify(cartData));
-  }, [cartData]);
+  const syncCartToBackend = async (updatedCart) => {
+    try {
+      await axios.post(
+        `${serverUrl}/api/cart/update`,
+        { cartData: updatedCart },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error("Error syncing cart:", error);
+    }
+  };
 
-  const addToCart = (productId, size) => {
+  const addToCart = async (productId, size) => {
     if (!size) {
-      alert("Please select a size");
+      toast.error("Please select a size");
       return;
     }
 
-    setCartData((prev) => {
-      const existingIndex = prev.findIndex(
-        (item) => item.productId === productId && item.size === size
+    try {
+      const response = await axios.post(
+        `${serverUrl}/api/cart/add`,
+        { productId, size },
+        { withCredentials: true }
       );
 
-      if (existingIndex !== -1) {
-        const updated = [...prev];
-        updated[existingIndex] = {
-          ...updated[existingIndex],
-          quantity: updated[existingIndex].quantity + 1,
-        };
-        return updated;
+      if (response.data.success) {
+        setCartData((prev) => {
+          const existingIndex = prev.findIndex(
+            (item) => item.productId === productId && item.size === size
+          );
+
+          if (existingIndex !== -1) {
+            const updated = [...prev];
+            updated[existingIndex] = {
+              ...updated[existingIndex],
+              quantity: updated[existingIndex].quantity + 1,
+            };
+            return updated;
+          }
+
+          return [...prev, { productId, size, quantity: 1 }];
+        });
+        toast.success("Item added to cart");
       }
-
-      return [...prev, { productId, size, quantity: 1 }];
-    });
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      toast.error("Failed to add item to cart");
+    }
   };
 
-  const removeFromCart = (productId, size) => {
-    setCartData((prev) =>
-      prev.filter(
-        (item) => !(item.productId === productId && item.size === size)
-      )
+  const removeFromCart = async (productId, size) => {
+    const updatedCart = cartData.filter(
+      (item) => !(item.productId === productId && item.size === size)
     );
+
+    setCartData(updatedCart);
+    await syncCartToBackend(updatedCart);
+    toast.success("Item removed from cart");
   };
 
-  const increaseQty = (productId, size) => {
-    setCartData((prev) =>
-      prev.map((item) =>
-        item.productId === productId && item.size === size
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
+  const increaseQty = async (productId, size) => {
+    const updatedCart = cartData.map((item) =>
+      item.productId === productId && item.size === size
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
     );
+
+    setCartData(updatedCart);
+    await syncCartToBackend(updatedCart);
   };
 
-  const decreaseQty = (productId, size) => {
-    setCartData((prev) =>
-      prev.map((item) =>
-        item.productId === productId && item.size === size
-          ? {
-              ...item,
-              quantity: item.quantity > 1 ? item.quantity - 1 : 1,
-            }
-          : item
-      )
+  const decreaseQty = async (productId, size) => {
+    const updatedCart = cartData.map((item) =>
+      item.productId === productId && item.size === size
+        ? {
+            ...item,
+            quantity: item.quantity > 1 ? item.quantity - 1 : 1,
+          }
+        : item
     );
+
+    setCartData(updatedCart);
+    await syncCartToBackend(updatedCart);
   };
 
   const getCartTotal = () => {
@@ -132,10 +166,12 @@ const ShopContextProvider = ({ children }) => {
     decreaseQty,
     getCartTotal,
     getCartCount,
+    getUserCart,
   };
 
   return (
     <ShopDataContext.Provider value={values}>
+      <ToastContainer />
       {children}
     </ShopDataContext.Provider>
   );

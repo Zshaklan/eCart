@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { ShopDataContext } from "../context/ShopContext.jsx";
 import Title from "../components/Title.jsx";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const {
@@ -13,6 +14,8 @@ const CartPage = () => {
     getCartTotal,
     products,
   } = useContext(ShopDataContext);
+
+  const navigate = useNavigate();
 
   const total = getCartTotal();
 
@@ -107,7 +110,10 @@ const CartPage = () => {
               </p>
             </div>
 
-            <button className="bg-[#46d1f7] text-black font-semibold py-3 mt-5 rounded-xl hover:bg-[#2bb4da] transition-all cursor-pointer">
+            <button
+              className="bg-[#46d1f7] text-black font-semibold py-3 mt-5 rounded-xl hover:bg-[#2bb4da] transition-all cursor-pointer"
+              onClick={() => navigate("/placeorder")}
+            >
               Proceed to Checkout
             </button>
           </div>
