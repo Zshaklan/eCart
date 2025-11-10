@@ -1,6 +1,7 @@
 import Order from "../model/order.model.js";
 import User from "../model/user.model.js";
 
+// for User
 export const placeOrder = async (req, res) => {
   try {
     const { items, amount, address } = req.body;
@@ -29,6 +30,7 @@ export const placeOrder = async (req, res) => {
   }
 };
 
+// for User
 export const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.userId });
@@ -42,6 +44,44 @@ export const getUserOrders = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error fetching orders",
+      error: error.message,
+    });
+  }
+};
+
+// for Admin
+export const getAllOrders = async (req, res) => {
+  try {
+    const adminEmail = req.adminEmail;
+
+    if (!adminEmail) {
+      return res.status(404).json({ message: "Unauthorized, Admin only!" });
+    }
+
+    const orders = await Order.find();
+    res.status(200).json({ message: "Orders fetched successfully!", orders });
+  } catch (error) {
+    console.error("getAllOrders error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching all orders ",
+      error: error.message,
+    });
+  }
+};
+
+// for Admin
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId, status } = req.body;
+
+    await Order.findByIdAndUpdate(orderId, { status });
+    return res.status(201).json({ message: "Order status updated!" });
+  } catch (error) {
+    console.error("updateOrderStatus error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating order status ",
       error: error.message,
     });
   }

@@ -78,6 +78,7 @@ const Navbar = () => {
           onClick={() => {
             setShowSearch((prev) => !prev);
             navigate("/collections");
+            setShowProfile(false);
           }}
         />
         {!userData ? (
@@ -96,7 +97,10 @@ const Navbar = () => {
         <IoMdCart
           size={25}
           className="hidden md:block"
-          onClick={() => navigate("/cart")}
+          onClick={() => {
+            navigate("/cart");
+            setShowProfile(false);
+          }}
         />
         {cartCount > 0 && (
           <p className="absolute w-[18px] h-[18px] bg-red-400 text-center text-white text-[9px] top-2.5 py-1 right-[23px] rounded hidden md:block">
@@ -142,10 +146,22 @@ const Navbar = () => {
                 Logout
               </li>
             )}
-            <li className="w-full hover:bg-[#2f2f2f] px-[15px] py-2.5 cursor-pointer">
+            <li
+              className="w-full hover:bg-[#2f2f2f] px-[15px] py-2.5 cursor-pointer"
+              onClick={() => {
+                navigate("/order");
+                setShowProfile(false);
+              }}
+            >
               Orders
             </li>
-            <li className="w-full hover:bg-[#2f2f2f] px-[15px] py-2.5 cursor-pointer">
+            <li
+              className="w-full hover:bg-[#2f2f2f] px-[15px] py-2.5 cursor-pointer"
+              onClick={() => {
+                navigate("/about");
+                setShowProfile(false);
+              }}
+            >
               About
             </li>
           </ul>
@@ -176,7 +192,10 @@ const Navbar = () => {
         </button>
         <button
           className="text-white flex items-center justify-center flex-col gap-2 relative"
-          onClick={() => navigate("/cart")}
+          onClick={() => {
+            navigate("/cart");
+            setShowProfile(false);
+          }}
         >
           <IoMdCart size={30} /> Cart
           {cartCount > 0 && (

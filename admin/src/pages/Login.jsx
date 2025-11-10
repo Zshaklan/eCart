@@ -88,7 +88,7 @@ const Login = () => {
               />
             )}
 
-            <button className="w-full h-[50px] bg-[#6060f5] rounded-lg flex items-center justify-center mt-5 text-[17px] font-semibold">
+            <button className="w-full h-[50px] bg-[#6060f5] rounded-lg flex items-center justify-center mt-5 text-[17px] font-semibold cursor-pointer">
               Login
             </button>
 

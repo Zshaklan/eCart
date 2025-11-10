@@ -15,7 +15,9 @@ const Lists = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${serverUrl}/api/product/list`);
+      const res = await axios.get(`${serverUrl}/api/product/list`, {
+        withCredentials: true,
+      });
       setProducts(res.data.products || []);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -45,16 +47,17 @@ const Lists = () => {
 
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line
   }, []);
 
   return (
-    <div className="w-screen min-h-screen bg-linear-to-l from-[#141414] to-[#0c2025] overflow-x-hidden relative">
+    <div className="w-full min-h-screen bg-linear-to-l from-[#141414] to-[#0c2025] overflow-x-hidden relative">
       <Navbar />
       <Sidebar />
 
-      <div className="w-[82%] h-full flex items-center justify-start overflow-x-hidden absolute right-0">
-        <div className="w-full md:w-[90%] h-full mt-[70px] flex flex-col gap-[30px] py-[60px] px-[30px] md:px-[60px]">
-          <h2 className="w-[400px] h-[50px] text-[25px] md:text-[40px] text-white">
+      <div className="w-full md:w-[82%] h-full flex items-center justify-start overflow-x-hidden absolute md:right-0 md:left-auto left-0">
+        <div className="w-full md:w-[90%] h-full mt-[70px] flex flex-col gap-6 py-20 px-4 sm:px-6 md:px-[60px]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-semibold">
             All Listed Products
           </h2>
 
@@ -65,16 +68,16 @@ const Lists = () => {
           ) : products.length === 0 ? (
             <p className="text-gray-400 text-center">No products found</p>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-6 justify-items-center sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {products.map((product) => (
                 <div
                   key={product._id}
-                  className="bg-slate-600 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-200 flex flex-col"
+                  className="bg-slate-600 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-200 flex flex-col w-full max-w-[320px]"
                 >
                   <img
                     src={product.image1}
                     alt={product.name}
-                    className="w-full h-48 object-cover rounded-xl mb-4"
+                    className="w-full h-48 sm:h-56 md:h-60 object-cover rounded-xl mb-4"
                   />
 
                   <div className="flex-1 flex flex-col justify-between relative">
@@ -85,7 +88,7 @@ const Lists = () => {
                       <p className="text-gray-400 text-sm mb-2">
                         {product.category} • {product.subcategory}
                       </p>
-                      <p className="font-medium text-[#00e0c6] mb-2">
+                      <p className="font-semibold text-[#00e0c6] mb-2 text-lg">
                         ₹{product.price}
                       </p>
                       <p className="text-white text-sm">
@@ -98,7 +101,7 @@ const Lists = () => {
 
                     <button
                       onClick={() => deleteProduct(product._id)}
-                      className="absolute bottom-0 right-2 text-red-500 hover:text-red-400 transition cursor-pointer"
+                      className="absolute bottom-2 right-2 text-red-500 hover:text-red-400 transition cursor-pointer"
                     >
                       <MdDeleteOutline size={30} />
                     </button>
